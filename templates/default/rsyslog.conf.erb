@@ -37,11 +37,15 @@ $UDPServerRun <%= node['rsyslog']['port'] %>
 #### GLOBAL DIRECTIVES ####
 ###########################
 
+# GrayLog2 Format
+$template GRAYLOG2,"<%%PRI%>1 %timegenerated:::date-rfc3339% %HOSTNAME% %syslogtag% - %APP-NAME%: %msg:::drop-last-lf%\n"
+
 #
 # Use default timestamp format.
 # To enable high precision timestamps, comment out the following line.
 #
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$ActionFileDefaultTemplate <%= node['rsyslog']['default_file_template'] %>
+$ActionForwardDefaultTemplate <%= node['rsyslog']['default_forward_template'] %>
 
 # Filter duplicated messages
 $RepeatedMsgReduction on
