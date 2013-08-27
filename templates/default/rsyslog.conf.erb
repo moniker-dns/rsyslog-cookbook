@@ -21,17 +21,20 @@ $ModLoad imuxsock # provides support for local system logging
 $ModLoad imklog   # provides kernel logging support (previously done by rklogd)
 #$ModLoad immark  # provides --MARK-- message capability
 
-<% if node['rsyslog']['server'] -%>
-# Provide <%= @protocol.upcase %> log reception
-<% case @protocol -%>
-<% when "tcp" -%>
+  <% if node['rsyslog']['listener']['tcp_enabled'] -%>
+# Provide TCP log reception
 $ModLoad imtcp
-$InputTCPServerRun <%= node['rsyslog']['port'] %>
-<% when "udp" -%>
+$InputTCPServerRun <%= node['rsyslog']['listener']['tcp_port'] %>
+  <% end -%>
+
+  <% if node['rsyslog']['listener']['udp_enabled'] -%>
+# Provide UDP log reception
 $ModLoad imudp
-$UDPServerRun <%= node['rsyslog']['port'] %>
-<% end -%>
-<% end -%>
+  <% unless node['rsyslog']['listener']['udp_address'].nil? %>
+$UDPServerAddress <%= node['rsyslog']['listener']['udp_address'] %>
+  <% end %>
+$UDPServerRun <%= node['rsyslog']['listener']['udp_port'] %>
+  <% end -%>
 
 ###########################
 #### GLOBAL DIRECTIVES ####

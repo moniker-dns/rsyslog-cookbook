@@ -18,10 +18,20 @@
 #
 
 default["rsyslog"]["log_dir"]          = "/srv/rsyslog"
-default["rsyslog"]["server"]           = false
-default["rsyslog"]["protocol"]         = "tcp"
-default["rsyslog"]["port"]             = "514"
-default["rsyslog"]["server_ip"]        = nil
+
+# rsyslog shipper/remote configuration
+default["rsyslog"]["server_ip"]        = nil            # where to send logs
+default["rsyslog"]["protocol"]         = "tcp"          # protocol touse when sending logs
+default["rsyslog"]["port"]             = "514"          # port to use when sending logs
+
+# rsyslog server/listener options
+default["rsyslog"]["server"]                      = false
+default["rsyslog"]['listener']["tcp_enabled"]     = false          # listen on TCP?
+default["rsyslog"]['listener']["tcp_port"]        = "514"          # what port to listen for TCP on
+default["rsyslog"]['listener']["udp_enabled"]     = true           # listen on UDP?
+default["rsyslog"]['listener']["udp_port"]        = "514"          # what port to listen for UDP on
+default["rsyslog"]['listener']["udp_address"]     = nil            # what ip to bind to, nil means unconfigured, so rsyslog defaults
+
 default["rsyslog"]["server_search"]    = "role:loghost"
 default["rsyslog"]["remote_logs"]      = true
 default["rsyslog"]["per_host_dir"]     = "%$YEAR%/%$MONTH%/%$DAY%/%HOSTNAME%"

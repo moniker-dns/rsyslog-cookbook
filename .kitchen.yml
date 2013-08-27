@@ -13,7 +13,10 @@ suites:
   run_list: ["recipe[rsyslog::server]", "recipe[rsyslog::client]"]
   attributes:
     rsyslog:
-      server_ip: 127.0.0.1
+      server_ip: 127.0.0.1  # send to ourselves (dumb)
+      udp_enabled: true       # listen on udp..
+      udp_address: 127.0.0.1  # ..but bound to the loopback for safety
+
 - name: rsyslog-clientdisabled
   run_list: ["recipe[rsyslog::clientdisabled]"]
   attributes:
